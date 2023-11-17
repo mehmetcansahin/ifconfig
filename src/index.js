@@ -1,45 +1,64 @@
 import {Hono} from 'hono'
-import countries from './country.json' assert {type: 'json'};
+import {Home} from "./home";
+import countries from "./country.json";
 
 const app = new Hono()
-const Home = (params) => {
-    const {request} = params
-    console.log(params.request);
-    let headerParams = [
-        {name: "IP", value: "CF-Connecting-IP"},
-        {name: "IPv6", value: "CF-Connecting-IPv6"},
-        {name: "Country Code", value: "CF-IPCountry"}
-    ]
-    let cfParams = [
-        {name: "City", value: "city"},
-        {name: "Region", value: "region"},
-        {name: "Postal Code", value: "postalCode"},
-        {name: "Region Code", value: "regionCode"},
-        {name: "Timezone", value: "timezone"},
-        {name: "Longitude", value: "longitude"},
-        {name: "Latitude", value: "latitude"},
-        {name: "Http Protocol", value: "httpProtocol"},
-        {name: "Datacenter", value: "colo"},
-        {name: "ASN", value: "asn"},
-        {name: "ASN Organization", value: "asOrganization"},
-
-    ]
-
-    return <div>
-        {headerParams.map((item) => {
-            return <p>{item.name}: {request.header(item.value)}</p>
-        })}
-        <p>Country: {countries.find((country) => country["alpha-2"] == request.header("CF-IPCountry"))?.name}</p>
-        {cfParams.map((item) => {
-            return <p>{item.name}: {request.raw.cf[item.value]}</p>
-        })}
-    </div>
-}
 
 app.get('/', (c) => {
     return c.html(
         <Home request={c.req}/>
     )
+})
+
+app.get('/json', (c) => {
+    let headerParams = [
+        {name: "ip", value: "CF-Connecting-IP"},
+        {name: "ipv6", value: "CF-Connecting-IPv6"},
+        {name: "country_code", value: "CF-IPCountry"}
+    ]
+    let cfParams = [
+        {name: "city", value: "city"},
+        {name: "region", value: "region"},
+        {name: "postal_code", value: "postalCode"},
+        {name: "region_code", value: "regionCode"},
+        {name: "timezone", value: "timezone"},
+        {name: "longitude", value: "longitude"},
+        {name: "latitude", value: "latitude"},
+        {name: "http_protocol", value: "httpProtocol"},
+        {name: "datacenter", value: "colo"},
+        {name: "asn", value: "asn"},
+        {name: "asn_organization", value: "asOrganization"}
+    ]
+    console.log(c.req.raw.cf);
+    let result = {};
+    headerParams.forEach((param) => {
+        result[param.name] = c.req.header(param.value)
+    })
+    cfParams.forEach((param) => {
+        result[param.name] = c.req.raw.cf[param.value]
+    })
+    result["country"] = countries.find((country) => country["alpha-2"] === c.req.header("CF-IPCountry"))?.name
+    return c.json(result)
+})
+
+app.get('/ip', (c) => {
+    return c.text(c.req.header("CF-Connecting-IP"))
+})
+
+app.get('/country', (c) => {
+    return c.text(countries.find((country) => country["alpha-2"] === c.req.header("CF-IPCountry"))?.name)
+})
+
+app.get('/country-iso', (c) => {
+    return c.text(c.req.header("CF-IPCountry"))
+})
+
+app.get('/city', (c) => {
+    return c.text(c.req.raw.cf["city"])
+})
+
+app.get('/asn', (c) => {
+    return c.text(c.req.raw.cf["asn"])
 })
 
 export default app
