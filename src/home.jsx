@@ -91,12 +91,32 @@ export const Home = (params) => {
             <meta name="viewport"
                   content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
             <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+            <link rel="profile" href="https://gmpg.org/xfn/11"/>
+            <link rel="canonical" href="https://ifconfig.mehmetcansahin.com/"/>
+            <meta name="description"
+                  content="Find out what your public IPv4 and IPv6 address is revealing about you! My IP address information shows your IP location; city, region, country, ISP and location on a map."/>
+            <meta property="og:locale" content="en"/>
+            <meta property="og:type" content="website"/>
+            <meta property="og:title" content="What Is My IP Address? IP Address Tools and More"/>
+            <meta property="og:description"
+                  content="IP address lookup, location, proxy detection, email tracing, IP hiding tips, blacklist check, speed test, and forums. Find, get, and show my IP address."/>
+            <meta property="og:url" content="https://ifconfig.mehmetcansahin.com/"/>
+            <meta property="og:site_name" content="WhatIsMyIPAddress"/>
+            <meta name="twitter:card" content="summary_large_image"/>
+            <meta name="twitter:description"
+                  content="IP address lookup, location, proxy detection, email tracing, IP hiding tips, blacklist check, speed test, and forums. Find, get, and show my IP address."/>
+            <meta name="twitter:title" content="What Is My IP Address? IP Address Tools and More"/>
+            <meta name="twitter:image"
+                  content="https://ifconfig.mehmetcansahin.com/static/img/cover.png"/>
             <link rel="preconnect" href="https://fonts.bunny.net"/>
             <link href="https://fonts.bunny.net/css?family=open-sans:500" rel="stylesheet"/>
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-            <title>ifconfig</title>
+            <title>What is my IP Address - ifconfig</title>
         </head>
         <body>
+        <div style={container}>
+            <h1>What is my IP Address ?</h1>
+        </div>
         <div style={container}>
             <table style={table}>
                 {Object.entries(dataList).map((item) => {

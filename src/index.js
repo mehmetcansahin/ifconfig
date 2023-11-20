@@ -1,9 +1,13 @@
 import {Hono} from 'hono'
+import { serveStatic } from 'hono/cloudflare-workers'
 import {Home} from "./home";
 import {data} from "./data";
 import countries from "./country.json";
 
 const app = new Hono()
+
+app.use('/static/*', serveStatic({ root: './' }))
+app.use('/favicon.ico', serveStatic({ path: './favicon.ico' }))
 
 app.get('/', (c) => {
     let result = data(c.req)
