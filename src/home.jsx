@@ -140,7 +140,7 @@ export const Home = (params) => {
                     <a href={"/json"} style={aButton}>json</a>
                 </div>
                 <div style={resultView}>
-                    curl ifconfig.mehmetcansahin.com{pathName === "/" ? "/json" : pathName}
+                    curl https://ifconfig.mehmetcansahin.com{pathName === "/" ? "/json" : pathName}
                 </div>
                 <div style={resultView}>
                     {typeof result == "object" ? JSON.stringify(result, null, 2) : result}

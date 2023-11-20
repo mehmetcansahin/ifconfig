@@ -12,7 +12,7 @@ app.use('/favicon.ico', serveStatic({ path: './favicon.ico' }))
 app.get('/', (c) => {
     let result = data(c.req)
     if (["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
-        return c.text(result)
+        return c.json(result)
     } else {
         return c.html(
             <Home request={c.req} result={result}/>
