@@ -1,0 +1,17 @@
+{
+  "ip": "IP",
+  "ipv6": "IPv6",
+  "country_code": "Country Code",
+  "city": "City",
+  "region": "Region",
+  "postal_code": "Postal Code",
+  "region_code": "Region Code",
+  "timezone": "Timezone",
+  "longitude": "Longitude",
+  "latitude": "Latitude",
+  "http_protocol": "HTTP Protocol",
+  "datacenter": "Datacenter",
+  "asn": "ASN",
+  "asn_organization": "ASN Organization",
+  "country": "Country"
+}

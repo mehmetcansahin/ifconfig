@@ -1,7 +1,10 @@
-import countries from "./country.json";
+import labels from "./labels.json";
+import {data} from "./data";
 
 export const Home = (params) => {
-    const {request} = params
+    const {request, result} = params
+    const pathName = new URL(request.url).pathname
+    const dataList = data(request)
 
     let headerParams = [
         {name: "IP", value: "CF-Connecting-IP"},
@@ -23,25 +26,64 @@ export const Home = (params) => {
     ]
 
     const html = {
-        fontFamily: "'Raleway', sans-serif",
+        fontFamily: "'Open Sans', sans-serif",
     }
     const container = {
         display: "flex",
-        justifyContent: "center"
+        flexWrap: "wrap",
+        justifyContent: "center",
+        gap: "1rem"
     }
     const table = {
         borderCollapse: "collapse",
-        borderRadius: "10px",
+        border: "1px solid black",
     }
     const th = {
-        color: "#fff",
-        backgroundColor: "#333",
-        padding: "10px",
+        padding: "5px",
+        border: "1px solid black",
     }
     const td = {
-        padding: "10px",
-        backgroundColor: "#eee"
+        padding: "5px",
+        border: "1px solid black",
     }
+    const aButton = {
+        display: "inline-block",
+        padding: "10px 20px",
+        backgroundColor: "#333",
+        color: "#fff",
+        textDecoration: "none",
+        borderRadius: "5px",
+        margin: "0 2px"
+    }
+    const footerButton = {
+
+        color: "#333",
+    }
+    const resultView = {
+        minHeight: "4em",
+        whiteSpace: "pre",
+        overflowX: "scroll",
+        maxWidth: "550px",
+        padding: "0.5rem",
+        border: "1px solid grey",
+        marginTop: "0.5rem",
+        boxSizing: "border-box"
+    }
+    const mapStyle = {
+        marginTop: "2rem",
+        width: "810px",
+        height: "300px"
+    }
+
+    const initMap = `<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" ></script>
+        <script>
+            var getMap = document.getElementById('map');
+            var lat = getMap.getAttribute("lat");
+            var lon = getMap.getAttribute("lon");
+            var map = L.map('map').setView([lat, lon], 13);
+            L.marker([lat, lon]).addTo(map);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+        </script>`
 
     return (<html lang="en" style={html}>
         <head>
@@ -50,34 +92,51 @@ export const Home = (params) => {
                   content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
             <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
             <link rel="preconnect" href="https://fonts.bunny.net"/>
-            <link href="https://fonts.bunny.net/css?family=raleway:500" rel="stylesheet"/>
+            <link href="https://fonts.bunny.net/css?family=open-sans:500" rel="stylesheet"/>
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
             <title>ifconfig</title>
         </head>
         <body>
         <div style={container}>
             <table style={table}>
-                {headerParams.map((item) => {
+                {Object.entries(dataList).map((item) => {
                     return <>
                         <tr>
-                            <th style={th}>{item.name}</th>
-                            <td style={td}>{request.header(item.value)}</td>
-                        </tr>
-                    </>
-                })}
-                <tr>
-                    <th style={th}>Country</th>
-                    <td style={td}>{countries.find((country) => country["alpha-2"] === request.header("CF-IPCountry"))?.name}</td>
-                </tr>
-                {cfParams.map((item) => {
-                    return <>
-                        <tr>
-                            <th style={th}>{item.name}</th>
-                            <td style={td}>{request.raw.cf[item.value]}</td>
+                            <th style={th}>{labels[item[0]]}</th>
+                            <td style={td}>{item[1]}</td>
                         </tr>
                     </>
                 })}
             </table>
+            <div>
+                <b>Command line interface examples</b>
+                <p>You can try curl examples using the buttons below.</p>
+                <div>
+                    <a href={"/ip"} style={aButton}>ip</a>
+                    <a href={"/country"} style={aButton}>country</a>
+                    <a href={"/country-iso"} style={aButton}>country-iso</a>
+                    <a href={"/city"} style={aButton}>city</a>
+                    <a href={"/asn"} style={aButton}>asn</a>
+                    <a href={"/json"} style={aButton}>json</a>
+                </div>
+                <div style={resultView}>
+                    curl ifconfig.mehmetcansahin.com{pathName === "/" ? "/json" : pathName}
+                </div>
+                <div style={resultView}>
+                    {typeof result == "object" ? JSON.stringify(result, null, 2) : result}
+                </div>
+            </div>
         </div>
+        <div style={container}>
+            <div id="map" style={mapStyle} lat={dataList.latitude} lon={dataList.longitude}></div>
+        </div>
+        <div style={container}>
+            <div>
+                Source code is available on &nbsp;
+                <a href="https://github.com/mehmetcansahin/ifconfig" style={footerButton}>Github</a>
+            </div>
+        </div>
+        <div dangerouslySetInnerHTML={{__html: initMap}}/>
         </body>
         </html>
     )
