@@ -1,4 +1,8 @@
 {
+  "name": "ifconfig",
+  "version": "1.0.0",
+  "author": "Mehmetcan Şahin <sahinmcan@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "dev": "wrangler dev src/index.js",
     "deploy": "wrangler deploy --minify src/index.js"
