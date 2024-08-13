@@ -1,10 +1,23 @@
-import {Hono} from 'hono'
-import { serveStatic } from 'hono/cloudflare-workers'
-import {Home} from "./home";
-import {data} from "./data";
+import { Hono } from 'hono';
+import { serveStatic } from 'hono/cloudflare-workers';
+import { cors } from 'hono/cors';
 import countries from "./country.json";
+import { data } from "./data";
+import { Home } from "./home";
 
 const app = new Hono()
+
+app.use(
+    '/*',
+    cors({
+        origin: "*",
+        allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
+        allowMethods: ['GET', 'OPTIONS'],
+        exposeHeaders: [],
+        maxAge: 600,
+        credentials: true,
+    })
+)
 
 app.use('/static/*', serveStatic({ root: './' }))
 app.use('/favicon.ico', serveStatic({ path: './favicon.ico' }))
@@ -15,7 +28,7 @@ app.get('/', (c) => {
         return c.json(result)
     } else {
         return c.html(
-            <Home request={c.req} result={result}/>
+            <Home request={c.req} result={result} />
         )
     }
 })
@@ -26,7 +39,7 @@ app.get('/json', (c) => {
         return c.json(result)
     } else {
         return c.html(
-            <Home request={c.req} result={result}/>
+            <Home request={c.req} result={result} />
         )
     }
 })
@@ -37,7 +50,7 @@ app.get('/ip', (c) => {
         return c.text(result)
     } else {
         return c.html(
-            <Home request={c.req} result={result}/>
+            <Home request={c.req} result={result} />
         )
     }
 })
@@ -48,7 +61,7 @@ app.get('/country', (c) => {
         return c.text(result)
     } else {
         return c.html(
-            <Home request={c.req} result={result}/>
+            <Home request={c.req} result={result} />
         )
     }
 })
@@ -59,7 +72,7 @@ app.get('/country-iso', (c) => {
         return c.text(result)
     } else {
         return c.html(
-            <Home request={c.req} result={result}/>
+            <Home request={c.req} result={result} />
         )
     }
 })
@@ -70,7 +83,7 @@ app.get('/city', (c) => {
         return c.text(result)
     } else {
         return c.html(
-            <Home request={c.req} result={result}/>
+            <Home request={c.req} result={result} />
         )
     }
 })
@@ -81,7 +94,7 @@ app.get('/asn', (c) => {
         return c.text(result)
     } else {
         return c.html(
-            <Home request={c.req} result={result}/>
+            <Home request={c.req} result={result} />
         )
     }
 })
