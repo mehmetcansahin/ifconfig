@@ -24,7 +24,7 @@ app.use('/favicon.ico', serveStatic({ path: './favicon.ico' }))
 
 app.get('/', (c) => {
     let result = data(c.req)
-    if (["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
+    if (c.req.header("Content-Type") == "application/json" || ["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
         return c.json(result)
     } else {
         return c.html(
@@ -35,7 +35,7 @@ app.get('/', (c) => {
 
 app.get('/json', (c) => {
     let result = data(c.req)
-    if (["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
+    if (c.req.header("Content-Type") == "application/json" || ["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
         return c.json(result)
     } else {
         return c.html(
@@ -46,7 +46,7 @@ app.get('/json', (c) => {
 
 app.get('/ip', (c) => {
     let result = c.req.header("CF-Connecting-IP")
-    if (["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
+    if (c.req.header("Content-Type") == "text/plain" || ["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
         return c.text(result)
     } else {
         return c.html(
@@ -57,7 +57,7 @@ app.get('/ip', (c) => {
 
 app.get('/country', (c) => {
     let result = countries.find((country) => country["alpha-2"] === c.req.header("CF-IPCountry"))?.name
-    if (["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
+    if (c.req.header("Content-Type") == "text/plain" || ["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
         return c.text(result)
     } else {
         return c.html(
@@ -68,7 +68,7 @@ app.get('/country', (c) => {
 
 app.get('/country-iso', (c) => {
     let result = c.req.header("CF-IPCountry")
-    if (["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
+    if (c.req.header("Content-Type") == "text/plain" || ["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
         return c.text(result)
     } else {
         return c.html(
@@ -79,7 +79,7 @@ app.get('/country-iso', (c) => {
 
 app.get('/city', (c) => {
     let result = c.req.raw.cf["city"]
-    if (["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
+    if (c.req.header("Content-Type") == "text/plain" || ["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
         return c.text(result)
     } else {
         return c.html(
@@ -90,7 +90,7 @@ app.get('/city', (c) => {
 
 app.get('/asn', (c) => {
     let result = c.req.raw.cf["asn"]
-    if (["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
+    if (c.req.header("Content-Type") == "text/plain" || ["curl", "HTTPie", "httpie-go", "Wget", "fetch libfetch", "Go", "Go-http-client", "ddclient", "Mikrotik", "xh"].some(v => c.req.header("User-Agent").includes(v))) {
         return c.text(result)
     } else {
         return c.html(
